@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>QIURSTORE.ID</title>
+
+<style>
+/* RESET */
+* {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* BODY */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: black;
+  color: #00ff00;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* BOX */
+.box {
+  width: 90%;
+  max-width: 420px;
+  border: 2px solid #00ff00;
+  padding: 22px;
+}
+
+/* JUDUL */
+h2 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* TEXT */
+p {
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* DESKRIPSI */
+.desc {
+  margin-bottom: 15px;
+}
+
+/* INPUT & BUTTON */
+input,
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+/* BUTTON */
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00ff00;
+  color: black;
+}
+
+/* HIDDEN */
+.hidden {
+  display: none;
+}
+
+/* DATA */
+.data {
+  margin-top: 15px;
+  border-top: 1px dashed #00ff00;
+  padding-top: 15px;
+}
+
+/* COPY BUTTON */
+.copy {
+  margin-top: 8px;
+}
+
+/* ERROR */
+#error {
+  margin-top: 10px;
+  color: #00ff00;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="box" id="loginBox">
+  <h2>QIURSTORE.ID READY</h2>
+  <p class="desc">Masukan kode yang admin kirimkan melalui WA</p>
+
+  <input id="kodeInput" placeholder="Masukan kode">
+  <button onclick="cekKode()">KIRIM</button>
+
+  <p id="error"></p>
+</div>
+
+<!-- DATA -->
+<div class="box hidden" id="dataBox">
+  <p>
+    Halo user,<br>
+    kode ini hanya bisa dipakai <b>1x</b><br>
+    dan akan hilang dalam <b>1 menit</b>
+  </p>
+
+  <div class="data">
+    <p>Gmail:</p>
+    <div id="gmail"></div>
+    <button class="copy" onclick="copyText('gmail')">COPY</button>
+
+    <br><br>
+
+    <p>Password:</p>
+    <div id="password"></div>
+    <button class="copy" onclick="copyText('password')">COPY</button>
+  </div>
+
+  <p>Selamat bekerja, semangat!!</p>
+</div>
+
+<script>
+/* DATABASE KODE (EDIT BEBAS) */
+const database = {
+  "QiWd9": { gmail: "CelVip16", password: "QiurstoreID156" },
+  "Qj5j9": { gmail: "CelVip17", password: "QiurstoreID156" },
+  "Q6Rpe": { gmail: "CelVip18", password: "pass03" },
+  "QzZ5t": { gmail: "CelVip19", password: "QiurstoreID156" },
+  "Q1Rlf": { gmail: "CelVip20", password: "QiurstoreID156" },
+  "QIUR06": { gmail: "user06@gmail.com", password: "pass06" },
+  "QIUR07": { gmail: "user07@gmail.com", password: "pass07" },
+  "QIUR08": { gmail: "user08@gmail.com", password: "pass08" },
+  "QIUR09": { gmail: "user09@gmail.com", password: "pass09" },
+  "QIUR010": { gmail: "user10@gmail.com", password: "pass10" }
+};
+
+/* CEK KODE */
+function cekKode() {
+  const kode = document.getElementById("kodeInput").value.trim();
+  const error = document.getElementById("error");
+
+  error.innerText = "";
+
+  if (!database[kode]) {
+    error.innerText = "❌ KODE TIDAK VALID";
+    return;
+  }
+
+  let used = JSON.parse(localStorage.getItem("kodeTerpakai")) || [];
+
+  if (used.includes(kode)) {
+    error.innerText = "⚠️ KODE SUDAH DIGUNAKAN";
+    return;
+  }
+
+  used.push(kode);
+  localStorage.setItem("kodeTerpakai", JSON.stringify(used));
+
+  document.getElementById("gmail").innerText = database[kode].gmail;
+  document.getElementById("password").innerText = database[kode].password;
+
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("dataBox").classList.remove("hidden");
+
+  setTimeout(() => {
+    document.getElementById("dataBox").innerHTML =
+      "<h3 style='text-align:center'>WAKTU HABIS</h3><p style='text-align:center'>KODE TELAH KADALUARSA</p>";
+  }, 60000);
+}
+
+/* COPY */
+function copyText(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text);
+  alert("Tersalin ke clipboard");
+}
+</script>
+
+</body>
+</html>
