@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- WAJIB: bikin ukuran normal di HP -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>QIURSTORE.ID</title>
 
 <style>
@@ -22,17 +20,20 @@ body {
   color: #00ff00;
   font-family: monospace;
   display: flex;
+  flex-direction: column; /* <<< PENTING */
   align-items: center;
-  justify-content: center;
-  padding: 15px; /* biar ga mepet layar */
+  justify-content: flex-start;
+  padding: 15px;
 }
 
 /* BOX */
 .box {
   width: 100%;
-  max-width: 520px;   /* <<< DIPERBESAR */
+  max-width: 520px;
   border: 2px solid #00ff00;
   padding: 22px;
+  margin-bottom: 20px;
+  background: black;
 }
 
 /* JUDUL */
@@ -43,22 +44,16 @@ h2 {
 
 /* TEXT */
 p {
-  font-size: 15px; /* <<< sedikit diperbesar */
+  font-size: 15px;
   text-align: center;
   line-height: 1.6;
-  word-break: break-word;
-}
-
-/* DESKRIPSI */
-.desc {
-  margin-bottom: 15px;
 }
 
 /* INPUT & BUTTON */
 input,
 button {
   width: 100%;
-  padding: 14px; /* <<< lebih enak disentuh */
+  padding: 14px;
   margin-top: 12px;
   background: black;
   color: #00ff00;
@@ -89,33 +84,39 @@ button:hover {
   padding-top: 15px;
 }
 
-/* COPY BUTTON */
-.copy {
-  margin-top: 8px;
-}
-
 /* ERROR */
 #error {
   margin-top: 10px;
-  color: #00ff00;
   text-align: center;
 }
 
-/* GAMBAR (kalau nanti pakai img) */
-img {
-  width: 100%;
-  height: auto;
-  display: block;
+/* ABSEN ITEM */
+.absen-item {
+  margin-top: 8px;
+  padding: 6px;
+  border-bottom: 1px dashed #00ff00;
+  font-size: 14px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- ================= ABSEN ================= -->
+<div class="box">
+  <h2>ABSEN WORKER</h2>
+
+  <input id="namaWorker" placeholder="Nama worker">
+  <input id="statusWorker" placeholder="Status (contoh: 1 done)">
+  <button onclick="kirimAbsen()">KIRIM ABSEN</button>
+
+  <div class="data" id="listAbsen"></div>
+</div>
+
+<!-- ================= LOGIN ================= -->
 <div class="box" id="loginBox">
   <h2>QIURSTORE.ID READY</h2>
-  <p class="desc">Masukan kode yang admin kirimkan melalui WA</p>
+  <p>Masukan kode yang admin kirimkan melalui WA</p>
 
   <input id="kodeInput" placeholder="Masukan kode">
   <button onclick="cekKode()">KIRIM</button>
@@ -123,7 +124,7 @@ img {
   <p id="error"></p>
 </div>
 
-<!-- DATA -->
+<!-- ================= DATA ================= -->
 <div class="box hidden" id="dataBox">
   <p>
     Halo user,<br>
@@ -134,19 +135,63 @@ img {
   <div class="data">
     <p>Gmail:</p>
     <div id="gmail"></div>
-    <button class="copy" onclick="copyText('gmail')">COPY</button>
+    <button onclick="copyText('gmail')">COPY</button>
 
     <br><br>
 
     <p>Password:</p>
     <div id="password"></div>
-    <button class="copy" onclick="copyText('password')">COPY</button>
+    <button onclick="copyText('password')">COPY</button>
   </div>
 
   <p>Selamat bekerja, semangat!!</p>
 </div>
 
 <script>
+/* ================= ABSEN (PERSISTENT) ================= */
+const STORAGE_KEY = "absen_qiurstore";
+
+/* tampilkan absen saat halaman dibuka */
+window.onload = function () {
+  loadAbsen();
+};
+
+function loadAbsen() {
+  const list = document.getElementById("listAbsen");
+  list.innerHTML = "";
+
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+  data.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "absen-item";
+    div.innerText = item;
+    list.appendChild(div);
+  });
+}
+
+function kirimAbsen() {
+  const nama = document.getElementById("namaWorker").value.trim();
+  const status = document.getElementById("statusWorker").value.trim();
+
+  if (!nama || !status) {
+    alert("Nama & status wajib diisi");
+    return;
+  }
+
+  const absenText = nama + " " + status;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  data.push(absenText);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  loadAbsen();
+
+  document.getElementById("namaWorker").value = "";
+  document.getElementById("statusWorker").value = "";
+}
+
+/* ================= LOGIN ================= */
 const database = {
   "QiWd9": { gmail: "CelVip16", password: "QiurstoreID156" },
   "Qj5j9": { gmail: "CelVip17", password: "QiurstoreID156" },
