@@ -2,13 +2,16 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+
+<!-- WAJIB: bikin ukuran normal di HP -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>QIURSTORE.ID</title>
 
 <style>
 /* RESET */
 * {
   box-sizing: border-box;
-  max-width: 100%;
 }
 
 /* BODY */
@@ -21,12 +24,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 15px; /* biar ga mepet layar */
 }
 
 /* BOX */
 .box {
-  width: 90%;
-  max-width: 420px;
+  width: 100%;
+  max-width: 520px;   /* <<< DIPERBESAR */
   border: 2px solid #00ff00;
   padding: 22px;
 }
@@ -39,7 +43,7 @@ h2 {
 
 /* TEXT */
 p {
-  font-size: 14px;
+  font-size: 15px; /* <<< sedikit diperbesar */
   text-align: center;
   line-height: 1.6;
   word-break: break-word;
@@ -54,13 +58,13 @@ p {
 input,
 button {
   width: 100%;
-  padding: 12px;
+  padding: 14px; /* <<< lebih enak disentuh */
   margin-top: 12px;
   background: black;
   color: #00ff00;
   border: 1px solid #00ff00;
   font-family: monospace;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* BUTTON */
@@ -95,6 +99,13 @@ button:hover {
   margin-top: 10px;
   color: #00ff00;
   text-align: center;
+}
+
+/* GAMBAR (kalau nanti pakai img) */
+img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 </style>
 </head>
@@ -136,25 +147,17 @@ button:hover {
 </div>
 
 <script>
-/* DATABASE KODE (EDIT BEBAS) */
 const database = {
   "QiWd9": { gmail: "CelVip16", password: "QiurstoreID156" },
   "Qj5j9": { gmail: "CelVip17", password: "QiurstoreID156" },
   "Q6Rpe": { gmail: "CelVip18", password: "pass03" },
   "QzZ5t": { gmail: "CelVip19", password: "QiurstoreID156" },
-  "Q1Rlf": { gmail: "CelVip20", password: "QiurstoreID156" },
-  "QIUR06": { gmail: "user06@gmail.com", password: "pass06" },
-  "QIUR07": { gmail: "user07@gmail.com", password: "pass07" },
-  "QIUR08": { gmail: "user08@gmail.com", password: "pass08" },
-  "QIUR09": { gmail: "user09@gmail.com", password: "pass09" },
-  "QIUR010": { gmail: "user10@gmail.com", password: "pass10" }
+  "Q1Rlf": { gmail: "CelVip20", password: "QiurstoreID156" }
 };
 
-/* CEK KODE */
 function cekKode() {
   const kode = document.getElementById("kodeInput").value.trim();
   const error = document.getElementById("error");
-
   error.innerText = "";
 
   if (!database[kode]) {
@@ -163,7 +166,6 @@ function cekKode() {
   }
 
   let used = JSON.parse(localStorage.getItem("kodeTerpakai")) || [];
-
   if (used.includes(kode)) {
     error.innerText = "⚠️ KODE SUDAH DIGUNAKAN";
     return;
@@ -184,10 +186,8 @@ function cekKode() {
   }, 60000);
 }
 
-/* COPY */
 function copyText(id) {
-  const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text);
+  navigator.clipboard.writeText(document.getElementById(id).innerText);
   alert("Tersalin ke clipboard");
 }
 </script>
